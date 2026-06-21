@@ -2,7 +2,7 @@
 set -Eeuo pipefail
 
 # 修改默认IP & 固件名称 & 编译署名和时间
-sed -i 's/192.168.1.1/192.168.2.1/g' package/base-files/files/bin/config_generate
+sed -i 's/192.168.1.1/192.168.68.1/g' package/base-files/files/bin/config_generate
 sed -i "s/hostname='.*'/hostname='Roc'/g" package/base-files/files/bin/config_generate
 sed -i "s#_('Firmware Version'), (L\.isObject(boardinfo\.release) ? boardinfo\.release\.description + ' / ' : '') + (luciversion || ''),# \
             _('Firmware Version'),\n \
@@ -42,20 +42,20 @@ rm -rf feeds/packages/lang/golang
 
 # Git稀疏克隆，只克隆指定目录到本地
 function git_sparse_clone() {
-  local branch="$1"
-  local repourl="$2"
-  local repodir
-  shift 2
+	local branch="$1"
+	local repourl="$2"
+	local repodir
+	shift 2
 
-  repodir="$(basename "${repourl%.git}")"
-  rm -rf "$repodir"
-  git clone --depth=1 -b "$branch" --single-branch --filter=blob:none --sparse "$repourl" "$repodir"
-  (
-    cd "$repodir"
-    git sparse-checkout set "$@"
-    mv -f "$@" ../package
-  )
-  rm -rf "$repodir"
+	repodir="$(basename "${repourl%.git}")"
+	rm -rf "$repodir"
+	git clone --depth=1 -b "$branch" --single-branch --filter=blob:none --sparse "$repourl" "$repodir"
+	(
+		cd "$repodir"
+		git sparse-checkout set "$@"
+		mv -f "$@" ../package
+	)
+	rm -rf "$repodir"
 }
 
 # Aria2 & nginx & Go & frp & Argon & Aurora & OpenList & Lucky & wechatpush & OpenAppFilter & 集客无线AC控制器 & 雅典娜LED控制
@@ -98,7 +98,7 @@ git clone --depth=1 https://github.com/Openwrt-Passwall/openwrt-passwall2 packag
 git clone --depth=1 https://github.com/vernesong/OpenClash package/luci-app-openclash
 
 # 清理 PassWall 的 chnlist 规则文件
-echo "baidu.com"  > package/luci-app-passwall/luci-app-passwall/root/usr/share/passwall/rules/chnlist
+echo "baidu.com" >package/luci-app-passwall/luci-app-passwall/root/usr/share/passwall/rules/chnlist
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
