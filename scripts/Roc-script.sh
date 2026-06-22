@@ -102,3 +102,17 @@ echo "baidu.com" >package/luci-app-passwall/luci-app-passwall/root/usr/share/pas
 
 ./scripts/feeds update -a
 ./scripts/feeds install -a
+
+# ========== 注入 iStore 全家桶软件源 ==========
+# iStore 应用商店主源
+echo 'src-git istore https://github.com/linkease/istore;main' >>feeds.conf.default
+# 易有云/NAS 基础二进制软件包源
+echo 'src-git nas https://github.com/linkease/nas-packages.git;master' >>feeds.conf.default
+# 易有云/NAS 对应 LuCI 界面插件源
+echo 'src-git nas_luci https://github.com/linkease/nas-packages-luci.git;main' >>feeds.conf.default
+
+# 更新源并导入全部插件到编译环境
+./scripts/feeds update istore nas nas_luci
+./scripts/feeds install -a -p istore
+./scripts/feeds install -a -p nas
+./scripts/feeds install -a -p nas_luci
